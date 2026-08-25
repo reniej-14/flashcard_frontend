@@ -30,7 +30,7 @@ export default function AppLayout() {
                     </div>
                 </div>
                 
-                <div className="mt-8">
+                <div className="mt-12">
                     <Outlet/>
                 </div>
             </div>
