@@ -1,16 +1,20 @@
 import { Outlet } from "react-router-dom";
-import { v4 as uuidv4 } from 'uuid'
+import { useQuery } from "@tanstack/react-query";
+import { getDecks } from "../api/API";
 
 export default function AppLayout() {
 
-    let visitorId = localStorage.getItem('visitorId')
+    const { data } = useQuery({
+        queryFn: getDecks,
+        queryKey: ['decks'],
+        retry: 1
+    })
 
-    if (!visitorId) {
-        visitorId = uuidv4();
-        localStorage.setItem('visitorId', visitorId)
+    const totalMazos = data?.length
+    let plural = ''
+    if (totalMazos! > 1) {
+        plural = 's'
     }
-
-    
 
     return (
         <>
@@ -18,7 +22,7 @@ export default function AppLayout() {
                 <div className="flex flex-col md:flex-row justify-between md:items-center">   
                     <div className="pl-1.5 md:p-0">
                         <h1 className="font-semibold text-2xl">FlashCard</h1>
-                        <p className="text-gray-600">{} mazos</p>
+                        <p className="text-gray-600">{data?.length} mazo{plural}</p>
                     </div>
 
                     <div className="mt-4 md:mt-0 w-full md:w-auto">

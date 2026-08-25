@@ -3,7 +3,10 @@ export type Deck = {
     visitorId: string
     name: string
 }
-
+export type DeckWithStats = Deck & {
+    totalCards: number
+    totalLearneds: number
+}
 
 export type Card = {
     _id: string
