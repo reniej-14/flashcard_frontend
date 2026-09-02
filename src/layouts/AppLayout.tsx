@@ -1,8 +1,13 @@
 import { Outlet } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
-import { getDecks } from "../api/API";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Toaster } from "sonner"
+import { toast } from "sonner"
+import { createDeck, getDecks } from "../api/API";
+import CreateDeckModal from "../components/CreateDeckModal";
+import { useState } from "react";
 
 export default function AppLayout() {
+    const [showCreateModal, setShowCreateModal] = useState(false)
 
     const { data } = useQuery({
         queryFn: getDecks,
@@ -10,10 +15,34 @@ export default function AppLayout() {
         retry: 1
     })
 
+    const queryClient = useQueryClient()
+
+    const { mutate, isPending } = useMutation({
+        mutationFn: createDeck,
+        onError: (error) => {
+            toast.error(error.message)
+        },
+        onSuccess: (data) => {
+            toast.success(data)
+            queryClient.invalidateQueries({queryKey: ['decks']})
+            setShowCreateModal(false)
+        }
+    })
+
     const totalMazos = data?.length
     let plural = ''
     if (totalMazos! > 1) {
         plural = 's'
+    }
+
+    const handleCreateDeck = (deckName: string, file: File) => {
+        const visitorId = localStorage.getItem('visitorId')
+        const formData = new FormData()
+        formData.append('name', deckName) 
+        formData.append('visitorId', visitorId ?? '')
+        formData.append('pdf', file)      
+
+        mutate(formData)
     }
 
     return (
@@ -26,14 +55,24 @@ export default function AppLayout() {
                     </div>
 
                     <div className="mt-4 md:mt-0 w-full md:w-auto">
-                        <button className="bg-blue-500 text-white px-4 py-1.5 rounded-xl w-full font-semibold cursor-pointer">Nuevo Mazo</button>
+                        <button 
+                            className="bg-blue-500 text-white px-4 py-1.5 rounded-xl w-full font-semibold cursor-pointer"
+                            onClick={() => setShowCreateModal(true)}
+                        >Nuevo Mazo</button>
                     </div>
                 </div>
+                <CreateDeckModal
+                    isOpen={showCreateModal}
+                    onClose={() => setShowCreateModal(false)}
+                    onGenerate={handleCreateDeck}
+                    isPending={isPending}
+                />
                 
-                <div className="mt-12">
+                <div className="my-12 ">
                     <Outlet/>
                 </div>
             </div>
+            <Toaster position='top-right'/>
         </>
     )
 }

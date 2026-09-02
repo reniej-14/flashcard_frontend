@@ -1,7 +1,20 @@
 import { isAxiosError } from "axios"
 import { v4 as uuidv4 } from 'uuid'
 import api from "../lib/axios";
-import type { DeckWithStats } from "../types";
+import type { Deck, DeckWithStats } from "../types";
+
+export const createDeck = async (formData: FormData) => {
+    try {
+        const { data } = await api.post('/decks', formData)
+        return data
+    } catch (error) {
+        if (isAxiosError(error) && error.response) {
+            throw new Error(error.response.data.error, {
+                cause: error
+            })
+        }
+    }
+}
 
 export const getDecks = async () => {
     let visitorId = localStorage.getItem('visitorId')
@@ -12,6 +25,19 @@ export const getDecks = async () => {
 
     try {
         const { data } = await api<DeckWithStats[]>(`/decks/${visitorId}`)
+        return data
+    } catch (error) {
+        if (isAxiosError(error) && error.response) {
+            throw new Error(error.response.data.error, {
+                cause: error
+            })
+        }
+    }
+}
+
+export const getDeckById = async (deckId: Deck['_id']) => {
+    try {
+        const { data } = await api<DeckWithStats>(`/deck/${deckId}`)
         return data
     } catch (error) {
         if (isAxiosError(error) && error.response) {
