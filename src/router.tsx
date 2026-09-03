@@ -1,6 +1,8 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import HomeView from "./views/HomeView";
 import AppLayout from "./layouts/AppLayout";
+import DeckCardsView from "./views/DeckCardsView";
+import DeckLayout from "./layouts/DeckLayout";
 
 
 export default function Router() {
@@ -9,6 +11,10 @@ export default function Router() {
             <Routes>
                 <Route path="/" element={<AppLayout/>}>
                     <Route element={<HomeView/>} index={true}/>
+                </Route>
+
+                <Route path="/deck/:deckId" element={<DeckLayout/>}>
+                    <Route element={<DeckCardsView/>} index={true}/>
                 </Route>
             </Routes>
         </BrowserRouter>
