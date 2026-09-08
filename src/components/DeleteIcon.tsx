@@ -1,6 +1,6 @@
 type DeleteIconProps = {
-    className?: string
-    onClick?: (e: React.MouseEvent<SVGSVGElement>) => void
+  className?: string
+  onClick?: (e: React.MouseEvent<SVGSVGElement>) => void
 }
 
 export default function DeleteIcon({className = 'size-6', onClick }: DeleteIconProps) {

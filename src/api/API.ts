@@ -45,6 +45,7 @@ export const getDeckById = async (deckId: Deck['_id']) => {
                 cause: error
             })
         }
+        throw error
     }
 }
 

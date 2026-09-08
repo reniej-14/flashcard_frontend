@@ -8,8 +8,8 @@ export default function ProgressBar({ totalCards, totalLearneds }: ProgressBarPr
         ? Math.round((totalLearneds / totalCards) * 100)
         : 0
 
-    return (
-        <div className="mt-8">
+    return (        
+        <div>
             <div className="flex justify-between text-sm mb-2">
                 <span className="text-gray-400 font-medium">{totalLearneds} / {totalCards} aprendidas</span>
                 <span className="text-gray-500 font-semibold">{porcentaje}%</span>

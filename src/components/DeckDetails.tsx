@@ -6,6 +6,7 @@ import { deleteDeck } from "../api/API"
 import { useState } from "react"
 import ConfirmDeleteModal from "./ConfirmDeleteModal"
 import { useNavigate } from "react-router-dom"
+import { toast } from "sonner"
 
 type DeckDetailsProps = {
     deck: DeckWithStats
@@ -16,15 +17,15 @@ export default function DeckDetails({deck}: DeckDetailsProps) {
     const { name, _id, totalCards, totalLearneds } = deck
     const [ showModal, setShowModal ] = useState(false)
     const queryClient = useQueryClient()
-    const navigate = useNavigate()
+    const navigate = useNavigate()  
 
     const { mutate } = useMutation({
         mutationFn: deleteDeck,
         onError: (error) => {
-            console.log(error.message)
+            toast.error(error.message)
         },
         onSuccess: (data) => {
-            console.log(data)
+            toast.success(data)
             queryClient.invalidateQueries({queryKey: ['decks']})
         }
     })
@@ -47,11 +48,13 @@ export default function DeckDetails({deck}: DeckDetailsProps) {
                         className="size-5 hover:text-red-500 transition-all duration-200 opacity-0 group-hover:opacity-100"
                         onClick={(e) => {
                             e.stopPropagation()
-                            setShowModal(true)
+                            setShowModal(true)          
                         }}
                     />
                 </div>
-                <ProgressBar totalCards={totalCards} totalLearneds={totalLearneds}/>
+                <div className="mt-8">
+                    <ProgressBar totalCards={totalCards} totalLearneds={totalLearneds}/>
+                </div>
             </div>
 
             <ConfirmDeleteModal

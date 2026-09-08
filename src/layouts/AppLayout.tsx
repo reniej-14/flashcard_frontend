@@ -47,7 +47,7 @@ export default function AppLayout() {
 
     return (
         <>
-            <div className="max-w-[90%] md:max-w-4xl mx-auto mt-12 ">
+            <div className="max-w-[95%] md:max-w-4xl mx-auto mt-12 ">
                 <div className="flex flex-col md:flex-row justify-between md:items-center">   
                     <div className="pl-1.5 md:p-0">
                         <h1 className="font-semibold text-2xl">FlashCard</h1>

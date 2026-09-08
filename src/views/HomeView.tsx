@@ -10,7 +10,6 @@ export default function HomeView() {
         queryKey: ['decks'],
         retry: 1
     })
-    console.log(data)
 
     if (isLoading) return 'Cargando'
     if (data?.length === 0) return 'Aún no tienes mazos creados'
