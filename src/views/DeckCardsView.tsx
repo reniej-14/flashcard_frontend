@@ -9,7 +9,7 @@ export default function DeckCardsView() {
     const { data, isLoading } = useQuery({
         queryFn: () => getCards(deckId!),
         queryKey: ['cards'],
-        retry: 1
+        retry: 1    
     })
 
     

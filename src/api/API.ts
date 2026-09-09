@@ -49,19 +49,6 @@ export const getDeckById = async (deckId: Deck['_id']) => {
     }
 }
 
-export const getCards = async (deckId: Deck['_id']) => {
-    try {
-        const { data } = await api<Card[]>(`cards/${deckId}`)
-        return data
-    } catch (error) {
-        if (isAxiosError(error) && error.response) {
-            throw new Error(error.response.data.error, {
-                cause: error
-            })
-        }
-    }
-}
-
 export const deleteDeck = async (id: string) => {
     try {
         const { data } = await api.delete<string>(`/decks/${id}`)
@@ -72,5 +59,32 @@ export const deleteDeck = async (id: string) => {
                 cause: error
             })
         }
+    }
+}
+
+export const getCards = async (deckId: Deck['_id']) => {
+    try {
+        const { data } = await api<Card[]>(`/cards/${deckId}`)
+        return data
+    } catch (error) {
+        if (isAxiosError(error) && error.response) {
+            throw new Error(error.response.data.error, {
+                cause: error
+            })
+        }
+    }
+}
+
+export const updateCard = async (cardId: Card['_id']) => {
+    try {
+        const { data } = await api.patch<string>(`/cards/${cardId}`, {learned: true})
+        return data
+    } catch (error) {
+        if (isAxiosError(error) && error.response) {
+            throw new Error(error.response.data.error, {
+                cause: error
+            })
+        }
+        throw error
     }
 }
