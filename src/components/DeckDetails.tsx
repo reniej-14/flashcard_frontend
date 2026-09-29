@@ -31,8 +31,6 @@ export default function DeckDetails({deck}: DeckDetailsProps) {
     })
 
     const handleDelete = () => {
-        console.log(_id)
-        console.log('Eliminado mazo...')
         mutate(_id) 
     }
 

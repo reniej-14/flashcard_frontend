@@ -13,6 +13,7 @@ export const createDeck = async (formData: FormData) => {
                 cause: error
             })
         }
+        throw error
     }
 }
 
@@ -32,6 +33,7 @@ export const getDecks = async () => {
                 cause: error
             })
         }
+        throw error
     }
 }
 
@@ -59,6 +61,7 @@ export const deleteDeck = async (id: string) => {
                 cause: error
             })
         }
+        throw error
     }
 }
 
@@ -72,6 +75,7 @@ export const getCards = async (deckId: Deck['_id']) => {
                 cause: error
             })
         }
+        throw error
     }
 }
 
