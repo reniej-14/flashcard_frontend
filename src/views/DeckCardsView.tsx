@@ -1,7 +1,8 @@
 import { useState } from "react"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { useParams } from "react-router-dom"
-import { getCards, updateCard } from "../api/API"
+import { getCards, resetDeck, updateCard } from "../api/API"
+import { toast } from "sonner"
 
 export default function DeckCardsView() {
     const { deckId } = useParams()
@@ -27,14 +28,27 @@ export default function DeckCardsView() {
         }
     })
 
+    const { mutate: mutateResetDeck } = useMutation({
+        mutationFn: resetDeck,
+        onError: (error) => {
+            toast.error(error.message)
+        },
+        onSuccess: (data) => {
+            console.log(data)
+            queryClient.invalidateQueries({ queryKey: ['deck'] })
+            queryClient.invalidateQueries({ queryKey: ['cards', deckId] })
+        }
+    })
+    const handleReset = () => {
+        mutateResetDeck(deckId!)
+    }
+
+
     if (isLoading) return 'Cargando...'
 
     if (data) {
         const pendingCards = data.filter(card => !card.learned)
-        const handleClick = () => {
-            console.log('Reiniciando mazo...')
-        }
-
+        
         if (pendingCards.length === 0) {    
             return (
                 <>
@@ -44,7 +58,7 @@ export default function DeckCardsView() {
                     <div className="flex justify-center mt-10">
                         <button
                             className="px-4 py-1 rounded-xl bg-blue-500 text-white font-semibold disabled:opacity-50 transition-all duration-300 hover:bg-blue-700 hover:cursor-pointer"
-                            onClick={handleClick}
+                            onClick={handleReset}
                         >
                             Reiniciar
                         </button>

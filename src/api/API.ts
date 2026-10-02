@@ -51,6 +51,20 @@ export const getDeckById = async (deckId: Deck['_id']) => {
     }
 }
 
+export const resetDeck = async (deckId: Deck['_id']) => {
+    try {
+        const { data } = await api.patch<string>(`/deck/${deckId}`)
+        return data
+    } catch (error) {
+        if (isAxiosError(error) && error.response) {
+            throw new Error(error.response.data.error, {
+                cause: error
+            })
+        }
+        throw error
+    }
+}
+
 export const deleteDeck = async (id: string) => {
     try {
         const { data } = await api.delete<string>(`/decks/${id}`)
